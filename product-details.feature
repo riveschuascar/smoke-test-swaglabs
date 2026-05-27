@@ -15,6 +15,6 @@ Feature: Product Detail Page
     And the "Add to cart" button should be visible
 
   Scenario: Return to the inventory page
-    Given I'm on the Sauce Labs Backpack product page
+    Given I'm on the "Sauce Labs Backpack" product page
     When I click on the "Back to products" link
     Then I should be redirected to the Products page
