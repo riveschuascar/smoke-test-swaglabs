@@ -1,0 +1,28 @@
+@login
+Feature: Login
+
+  As a SauceDemo user
+  I want to log in to the application
+  So that I can access the inventory page
+
+  @smoke
+  Scenario: Login fails with empty form
+    Given I am on the SauceDemo login page
+    When I click the login button
+    Then I should see the required username error message
+
+  @smoke
+  Scenario: Successful login with standard user
+    Given I am on the SauceDemo login page
+    When I enter the username "standard_user"
+    And I enter the password "secret_sauce"
+    And I click the login button
+    Then I should be redirected to the inventory page
+
+  @smoke
+  Scenario: Login fails with locked out user
+    Given I am on the SauceDemo login page
+    When I enter the username "locked_out_user"
+    And I enter the password "secret_sauce"
+    And I click the login button
+    Then I should see the locked out user error message
