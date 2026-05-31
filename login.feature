@@ -6,23 +6,26 @@ Feature: Login
   So that I can access the inventory page
 
   @smoke
-  Scenario: Login fails with empty form
+  Scenario Outline: Login fails with invalid data
     Given I am on the SauceDemo login page
-    When I click the login button
-    Then I should see the required username error message
+    When I enter the username "<username>"
+    And I enter the password "<password>"
+    And I click the login button
+    Then I should see the login error message "<error_message>"
+
+    Examples:
+      | case            | username        | password     | error_message                              |
+      | Empty form      |                 |              | Username is required                      |
+      | Locked out user | locked_out_user | secret_sauce | Sorry, this user has been locked out.     |
 
   @smoke
-  Scenario: Successful login with standard user
+  Scenario Outline: Successful login with valid data
     Given I am on the SauceDemo login page
-    When I enter the username "standard_user"
-    And I enter the password "secret_sauce"
+    When I enter the username "<username>"
+    And I enter the password "<password>"
     And I click the login button
     Then I should be redirected to the inventory page
 
-  @smoke
-  Scenario: Login fails with locked out user
-    Given I am on the SauceDemo login page
-    When I enter the username "locked_out_user"
-    And I enter the password "secret_sauce"
-    And I click the login button
-    Then I should see the locked out user error message
+    Examples:
+      | case          | username      | password     |
+      | Standard user | standard_user | secret_sauce |
