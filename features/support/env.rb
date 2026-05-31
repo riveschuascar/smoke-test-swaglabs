@@ -6,21 +6,21 @@ require 'capybara-screenshot/cucumber'
 require 'selenium-webdriver'
 
 Capybara.run_server = false
-
-Capybara.default_driver = :selenium 
 Capybara.default_max_wait_time = 15
 
 Capybara.register_driver :chrome_testing do |app|
   options = Selenium::WebDriver::Chrome::Options.new
+
+  options.binary = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
+
   options.add_argument('--start-maximized')
-  options.add_argument('--disable-features=PasswordLeakDetection') # Desactivar el popup por contrasena filtrada
+  options.add_argument('--disable-features=PasswordLeakDetection')
+  options.add_argument('--disable-notifications')
+  options.add_argument('--disable-popup-blocking')
+  options.add_argument('--remote-allow-origins=*')
+
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
-# Asignamos el driver registrado como el predeterminado para tus pruebas
 Capybara.default_driver = :chrome_testing
-Capybara.javascript_driver = :chrome_testing 
-
-#World(Capybara)
-Capybara.default_driver = :chrome_testing 
-Capybara.javascript_driver = :chrome_testing 
+Capybara.javascript_driver = :chrome_testing
