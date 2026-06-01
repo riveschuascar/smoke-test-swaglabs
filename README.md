@@ -233,6 +233,8 @@ y volver a ejecutar:
 bundle install
 ```
 
+> Alternativamente: si aun asi no se pueden instalar las dependencias con `bundle install`, se puede instalar manualmente las dependencias dentro del archivo `Gemfile` con el comando `gem install <nombre-gema>`.
+
 ### Chrome no inicia
 
 Verificar:
