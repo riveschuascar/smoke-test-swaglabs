@@ -1,4 +1,5 @@
 begin require 'rspec/expectations'; rescue LoadError; require 'spec/expectations'; end
+require 'tmpdir'
 require 'capybara'
 require 'capybara/dsl'
 require 'capybara/cucumber'
@@ -12,12 +13,20 @@ Capybara.register_driver :chrome_testing do |app|
   options = Selenium::WebDriver::Chrome::Options.new
 
   options.binary = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
-
   options.add_argument('--start-maximized')
-  options.add_argument('--disable-features=PasswordLeakDetection')
-  options.add_argument('--disable-notifications')
-  options.add_argument('--disable-popup-blocking')
-  options.add_argument('--remote-allow-origins=*')
+  # options.add_argument('--disable-features=PasswordLeakDetection')
+  # options.add_argument('--disable-notifications')
+  # options.add_argument('--disable-popup-blocking')
+  # options.add_argument('--remote-allow-origins=*')
+  # options.add_preference('credentials_enable_service', false)
+  # options.add_preference('profile.password_manager_enabled', false)
+
+  # options.add_argument('--disable-sync')
+  # options.add_argument('--disable-background-networking')
+  # options.add_argument('--disable-notifications')
+
+  options.add_argument("--user-data-dir=#{Dir.mktmpdir}")
+  options.add_argument('--guest')
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
