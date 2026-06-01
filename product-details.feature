@@ -1,3 +1,4 @@
+@smoke
 Feature: Product Detail Page
 
   As a Standard User
