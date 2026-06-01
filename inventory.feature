@@ -6,19 +6,25 @@ Feature: Inventory
   So that I can choose products to buy
 
   @smoke
-  Scenario: Validate direct inventory access without login
+  Scenario: Access inventory without login
     When I visit the inventory page directly
     Then I should remain on the login page after direct inventory access
     And I should see the inventory access denied message
 
   @smoke
-  Scenario Outline: Sort inventory products
+  Scenario: Sort products by name from Z to A
     Given I am logged in on the SauceDemo inventory page
-    When I sort inventory by "<sort_option>"
-    Then the first inventory item should show "<expected_value>" in the "<field>" field
+    When I sort inventory by "Name (Z to A)"
+    Then the first inventory product should be "Test.allTheThings() T-Shirt (Red)"
 
-    Examples:
-      | sort_option         | field | expected_value                    |
-      | Name (Z to A)       | name  | Test.allTheThings() T-Shirt (Red) |
-      | Price (high to low) | price | $49.99                            |
-      | Price (low to high) | price | $7.99                             |
+  @smoke
+  Scenario: Sort products by price from high to low
+    Given I am logged in on the SauceDemo inventory page
+    When I sort inventory by "Price (high to low)"
+    Then the first inventory product price should be "$49.99"
+
+  @smoke
+  Scenario: Sort products by price from low to high
+    Given I am logged in on the SauceDemo inventory page
+    When I sort inventory by "Price (low to high)"
+    Then the first inventory product price should be "$7.99"
