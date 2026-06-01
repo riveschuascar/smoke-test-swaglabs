@@ -2,15 +2,6 @@ CHECKOUT_USER = 'standard_user'
 CHECKOUT_PASSWORD = 'secret_sauce'
 CHECKOUT_PRODUCT_NAME = 'Sauce Labs Backpack'
 
-Before('@checkout') do
-  begin
-    Capybara.current_session.driver.quit
-  rescue
-  end
-
-  Capybara.reset_sessions!
-end
-
 def login_as_standard_user
   visit('https://www.saucedemo.com/')
 
