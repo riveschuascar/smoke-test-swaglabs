@@ -2,15 +2,6 @@ INVENTORY_USER = 'standard_user'
 INVENTORY_PASSWORD = 'secret_sauce'
 INVENTORY_URL = 'https://www.saucedemo.com/inventory.html'
 
-Before('@inventory') do
-  begin
-    Capybara.current_session.driver.quit
-  rescue
-  end
-
-  Capybara.reset_sessions!
-end
-
 def login_as_inventory_user
   visit('https://www.saucedemo.com/')
 

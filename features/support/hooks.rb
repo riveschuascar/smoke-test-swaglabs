@@ -1,3 +1,3 @@
-Before '@maximize' do
-    page.driver.browser.manage.window.maximize
+After do
+  Capybara.reset_sessions!
 end

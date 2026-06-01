@@ -1,4 +1,3 @@
-@checkout
 Feature: Checkout
 
   As a Standard User
