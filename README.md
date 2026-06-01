@@ -1,6 +1,7 @@
-# Proyecto de Automatización Web
+# Proyecto de Automatización de un Smoke Test de la pagina 'saucedemo.com'
 
 Framework de automatización de pruebas web desarrollado con **Ruby**, **Cucumber**, **Capybara** y **Selenium Manager**, siguiendo el enfoque **BDD (Behavior Driven Development)** mediante escenarios escritos en **Gherkin**.
+La página web sobre la que se hicieron las pruebas es `https://www.saucedemo.com/`
 
 ## Tecnologías utilizadas
 
