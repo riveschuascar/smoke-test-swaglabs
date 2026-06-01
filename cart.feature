@@ -8,14 +8,14 @@ Feature: Cart
   Background:
     Given I am logged in with a clean cart
 
-  @smoke @inventory
+  @smoke
   Scenario: Add product to cart from inventory page
     When I add the following product to the cart from the inventory page
       | product             |
       | Sauce Labs Backpack |
     Then the cart badge should show "1"
 
-  @smoke @inventory
+  @smoke
   Scenario: Remove product from inventory page
     When I add "Sauce Labs Backpack" to the cart from the inventory page
     And I remove "Sauce Labs Backpack" from the inventory page

@@ -35,20 +35,6 @@ CART_CSS = {
   checkout_info: '.checkout_info'
 }.freeze
 
-def restart_cart_session
-  begin
-    Capybara.current_session.driver.quit
-  rescue StandardError
-    nil
-  end
-
-  begin
-    Capybara.reset_sessions!
-  rescue StandardError
-    nil
-  end
-end
-
 def find_by_xpath(xpath)
   find(:xpath, xpath, wait: 10)
 end
@@ -62,8 +48,6 @@ def product_detail_link_xpath(product_name)
 end
 
 def login_with_clean_cart
-  restart_cart_session
-
   visit(CART_URLS[:login])
 
   find_by_xpath(CART_XPATH[:username_input]).set(CART_USERS[:standard_user])
