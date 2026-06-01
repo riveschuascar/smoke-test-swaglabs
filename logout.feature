@@ -1,5 +1,6 @@
 @smoke
 Feature: Logout
+
   As a user
   I want to be able to log out from my account
   So that my information remains secure
