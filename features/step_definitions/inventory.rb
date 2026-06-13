@@ -1,54 +1,36 @@
 INVENTORY_USER = 'standard_user'
 INVENTORY_PASSWORD = 'secret_sauce'
-INVENTORY_URL = 'https://www.saucedemo.com/inventory.html'
 
 def login_as_inventory_user
-  visit('https://www.saucedemo.com/')
+  login_page = LoginPage.new
+  inventory_page = InventoryPage.new
 
-  fill_in 'user-name', with: INVENTORY_USER
-  fill_in 'password', with: INVENTORY_PASSWORD
-  click_button 'login-button'
+  login_page.visit_page
+  login_page.login_as(INVENTORY_USER, INVENTORY_PASSWORD)
 
-  expect(page).to have_current_path('/inventory.html', ignore_query: true)
-  expect(page).to have_css('.inventory_list')
+  expect(inventory_page.displayed?).to be true
 end
 
-def sort_inventory_by(sort_option)
-  find('.product_sort_container').select(sort_option)
-end
-
-def first_inventory_item_name
-  all('.inventory_item_name').first.text
-end
-
-def first_inventory_item_price
-  all('.inventory_item_price').first.text
-end
-
-def first_inventory_item_value(field)
-  case field
-  when 'name'
-    first_inventory_item_name
-
-  when 'price'
-    first_inventory_item_price
-
-  else
-    raise "Unsupported inventory field: #{field}"
-  end
+Given('I am not logged in on SauceDemo') do
+  Capybara.reset_sessions!
 end
 
 When('I visit the inventory page directly') do
-  visit(INVENTORY_URL)
+  @inventory_page = InventoryPage.new
+  @inventory_page.visit_directly
 end
 
 Then('I should remain on the login page after direct inventory access') do
-  expect(page).to have_current_path('/', ignore_query: true)
+  @login_page = LoginPage.new
+
+  expect(@login_page.displayed?).to be true
 end
 
-Then('I should see the inventory access denied message') do
-  expect(page).to have_css('[data-test="error"]')
-  expect(page).to have_content('You can only access')
+Then('I should see the inventory access denied message') do |table|
+  @login_page = LoginPage.new
+  expected_message = table.hashes.first.fetch('expected_message')
+
+  expect(@login_page.error_message).to eq(expected_message)
 end
 
 Given('I am logged in on the SauceDemo inventory page') do
@@ -56,9 +38,12 @@ Given('I am logged in on the SauceDemo inventory page') do
 end
 
 When('I sort inventory by {string}') do |sort_option|
-  sort_inventory_by(sort_option)
+  @inventory_page = InventoryPage.new
+  @inventory_page.sort_by(sort_option)
 end
 
 Then('the first inventory item should show {string} in the {string} field') do |expected_value, field|
-  expect(first_inventory_item_value(field)).to eq(expected_value)
+  @inventory_page = InventoryPage.new
+
+  expect(@inventory_page.first_item_value(field)).to eq(expected_value)
 end
