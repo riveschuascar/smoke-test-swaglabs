@@ -1,7 +1,6 @@
 require_relative '../components/login_form'
 require_relative 'base_page'
 
-
 class LoginPage < BasePage
   URL = 'https://www.saucedemo.com/'
 
