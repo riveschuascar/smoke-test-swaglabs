@@ -23,3 +23,4 @@ end
 
 Capybara.default_driver = :chrome_testing
 Capybara.javascript_driver = :chrome_testing
+Dir[File.join(__dir__, 'pages', '*.rb')].sort.each { |file| require file }
