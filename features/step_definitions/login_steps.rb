@@ -1,9 +1,6 @@
-require_relative '../../pages/login_page'
-require_relative '../../pages/inventory_page'
-
 Given('I am on the SauceDemo login page') do
-  @login_page = LoginPage.new
-  @inventory_page = InventoryPage.new
+  @login_page = CleanPOM::LoginPage.new
+  @inventory_page = CleanPOM::InventoryPage.new
   @login_page.open
   @login_page.loaded?
 end
@@ -26,12 +23,4 @@ end
 
 Then('I should see the error message {string}') do |expected_message|
   expect(@login_page.login_form.error_message).to include(expected_message)
-end
-
-Then('I should see the required username error message') do
-  expect(@login_page.login_form.error_message).to include('Username is required')
-end
-
-Then('I should see the locked out user error message') do
-  expect(@login_page.login_form.error_message).to include('Sorry, this user has been locked out.')
 end

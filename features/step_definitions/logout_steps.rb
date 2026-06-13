@@ -3,6 +3,7 @@ require_relative '../../pages/inventory_page'
 
 Given('I navigate to the login page') do
   @login_page.open
+  @login_page.loaded?
 end
 
 Given('I enter the credentials') do |table|
