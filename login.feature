@@ -6,7 +6,7 @@ Feature: Login
   So that I can access the inventory page
 
   @smoke
-  Scenario Outline: Login fails with invalid data or user
+  Scenario Outline: Login fails with invalid credentials or user
     Given I am on the SauceDemo login page
     When I enter the username "<username>"
     And I enter the password "<password>"
@@ -21,7 +21,7 @@ Feature: Login
       | Locked out user | locked_out_user | secret_sauce | Sorry, this user has been locked out.     |
 
   @smoke
-  Scenario Outline: Successful login with valid credentials
+  Scenario Outline: Successful login with valid credentials and user
     Given I am on the SauceDemo login page
     When I enter the username "<username>"
     And I enter the password "<password>"
