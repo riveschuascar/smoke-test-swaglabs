@@ -7,6 +7,10 @@ class InventoryPage
   ITEM_NAME_SELECTOR = '.inventory_item_name'
   ITEM_PRICE_SELECTOR = '.inventory_item_price'
 
+  def product_names
+    all(ITEM_NAME_SELECTOR, wait: 10).map(&:text)
+  end
+  
   def visit_directly
     visit(INVENTORY_URL)
   end

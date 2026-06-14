@@ -25,3 +25,15 @@ Feature: Inventory
       | Name (Z to A)       | name  | Test.allTheThings() T-Shirt (Red) |
       | Price (high to low) | price | $49.99                            |
       | Price (low to high) | price | $7.99                             |
+
+  @smoke
+  Scenario: Return to the inventory page
+    Given I am logged in on the SauceDemo inventory page
+    Then I should see the inventory product list
+      | product                           |
+      | Sauce Labs Backpack               |
+      | Sauce Labs Bike Light             |
+      | Sauce Labs Bolt T-Shirt           |
+      | Sauce Labs Fleece Jacket          |
+      | Sauce Labs Onesie                 |
+      | Test.allTheThings() T-Shirt (Red) |

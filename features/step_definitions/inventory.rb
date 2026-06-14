@@ -47,3 +47,10 @@ Then('the first inventory item should show {string} in the {string} field') do |
 
   expect(@inventory_page.first_item_value(field)).to eq(expected_value)
 end
+
+Then('I should see the inventory product list') do |table|
+  @inventory_page = InventoryPage.new
+  expected_products = table.hashes.map { |row| row.fetch('product') }
+
+  expect(@inventory_page.product_names).to eq(expected_products)
+end
