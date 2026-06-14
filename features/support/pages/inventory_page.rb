@@ -14,8 +14,7 @@ class InventoryPage
   end
 
   def displayed?
-    has_current_path?('/inventory.html', ignore_query: true) &&
-      has_css?(INVENTORY_LIST_SELECTOR, wait: 10)
+    has_current_path?('/inventory.html', ignore_query: true) && has_css?(INVENTORY_LIST_SELECTOR, wait: 10)
   end
 
   def sort_by(option)
