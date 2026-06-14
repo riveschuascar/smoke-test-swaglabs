@@ -11,15 +11,15 @@ Feature: Product Detail Page
   Scenario: View the Backpack product details
     When I click on the "Sauce Labs Backpack" link
     Then the following product information should be displayed
-      | title       | Sauce Labs Backpack |
-      | price       | $29.99 |
-      And the button "Add to cart" is visible
+      | title | Sauce Labs Backpack |
+      | price | $29.99              |
+    And the button "Add to cart" is visible
 
   Scenario: Return to the inventory page
     Given I am on the "Sauce Labs Backpack" product page
-      And the following product information should be displayed
-      | title       | Sauce Labs Backpack |
-      | price       | $29.99 |
+    And the following product information should be displayed
+      | title | Sauce Labs Backpack |
+      | price | $29.99              |
     When I click on the "Back to products" link
     Then I am redirected to the Products page
-      And I can see the list of products
+    And I can see the list of products

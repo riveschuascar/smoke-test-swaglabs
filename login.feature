@@ -14,9 +14,9 @@ Feature: Login
     Then I should see the login error message "<error_message>"
 
     Examples:
-      | case            | username        | password     | error_message                              |
-      | Empty form      |                 |              | Username is required                      |
-      | Locked out user | locked_out_user | secret_sauce | Sorry, this user has been locked out.     |
+      | case            | username        | password     | error_message                         |
+      | Empty form      |                 |              | Username is required                  |
+      | Locked out user | locked_out_user | secret_sauce | Sorry, this user has been locked out. |
 
   @smoke
   Scenario Outline: Successful login with valid data

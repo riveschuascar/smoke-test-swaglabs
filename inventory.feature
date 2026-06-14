@@ -10,9 +10,9 @@ Feature: Inventory
     When I visit the inventory page directly
     Then I should remain on the login page after direct inventory access
     And I should see the inventory access denied message
-      | expected_message                 |
-      | Epic sadface: You can only access '/inventory.html' when you are logged in. |  
-    
+      | expected_message                                                            |
+      | Epic sadface: You can only access '/inventory.html' when you are logged in. |
+
 
   @smoke
   Scenario Outline: Sort inventory products
