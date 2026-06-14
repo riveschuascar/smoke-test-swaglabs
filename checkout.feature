@@ -26,9 +26,11 @@ Feature: Checkout
     And I enter checkout information "<first_name>" "<last_name>" "<postal_code>"
     And I continue to the checkout overview page
     And I perform the checkout step two action "<action>"
-    Then I should be redirected to "<expected_page>" after checkout step two
+    Then I should see the expected checkout step two result
+      | expected_page   | expected_path   | expected_content   |
+      | <expected_page> | <expected_path> | <expected_content> |
 
     Examples:
-      | first_name | last_name | postal_code | action | expected_page |
-      | Mauricio   | Garron    | 0000        | cancel | inventory     |
-      | Mauricio   | Garron    | 0000        | finish | complete      |
+      | first_name | last_name | postal_code | action | expected_page | expected_path           | expected_content          |
+      | Mauricio   | Garron    | 0000        | cancel | inventory     | /inventory.html         | Products                  |
+      | Mauricio   | Garron    | 0000        | finish | complete      | /checkout-complete.html | Thank you for your order! |

@@ -2,28 +2,29 @@ CHECKOUT_USER = 'standard_user'
 CHECKOUT_PASSWORD = 'secret_sauce'
 CHECKOUT_PRODUCT_NAME = 'Sauce Labs Backpack'
 
-def login_as_standard_user
+def prepare_product_in_cart_for_checkout
   login_page = LoginPage.new
   inventory_page = InventoryPage.new
+  cart_page = CartPage.new
 
   login_page.visit_page
   login_page.login_as(CHECKOUT_USER, CHECKOUT_PASSWORD)
 
-  expect(inventory_page.displayed?).to be true
-end
-
-def add_backpack_to_cart
-  find('#add-to-cart-sauce-labs-backpack').click
-  find('.shopping_cart_link').click
+  inventory_page.add_backpack_to_cart
+  inventory_page.open_cart
 
   expect(page).to have_current_path('/cart.html', ignore_query: true)
   expect(page).to have_content(CHECKOUT_PRODUCT_NAME)
+  expect(cart_page.displayed_with_product?(CHECKOUT_PRODUCT_NAME)).to be true
 end
 
+# ========== GIVEN ==========
+
 Given('I have a product in the cart for checkout') do
-  login_as_standard_user
-  add_backpack_to_cart
+  prepare_product_in_cart_for_checkout
 end
+
+# ========== WHEN - Checkout Step One ==========
 
 When('I go to the checkout step one page') do
   @checkout_page = CheckoutPage.new
@@ -37,22 +38,9 @@ When('I continue checkout with empty information') do
   @checkout_page.continue
 end
 
-Then('I should see the checkout first name required error message') do |table|
-  @checkout_page = CheckoutPage.new
-  expected_message = table.hashes.first.fetch('expected_message')
-
-  expect(@checkout_page.error_message).to eq(expected_message)
-end
-
 When('I cancel checkout from step one') do
   @checkout_page = CheckoutPage.new
   @checkout_page.cancel
-end
-
-Then('I should be redirected to the cart page from checkout') do
-  @checkout_page = CheckoutPage.new
-
-  expect(@checkout_page.on_cart?).to be true
 end
 
 When('I enter checkout information {string} {string} {string}') do |first_name, last_name, postal_code|
@@ -60,11 +48,13 @@ When('I enter checkout information {string} {string} {string}') do |first_name, 
   @checkout_page.fill_information(first_name, last_name, postal_code)
 end
 
+# ========== WHEN - Checkout Step Two ==========
+
 When('I continue to the checkout overview page') do
   @checkout_page = CheckoutPage.new
-  @checkout_page.continue
+  @checkout_page.continue_to_overview
 
-  expect(@checkout_page.on_step_two?).to be true
+  expect(@checkout_page.overview_displayed?).to be true
 end
 
 When('I perform the checkout step two action {string}') do |action|
@@ -80,16 +70,32 @@ When('I perform the checkout step two action {string}') do |action|
   end
 end
 
-Then('I should be redirected to {string} after checkout step two') do |expected_page|
+# ========== THEN - Error Validations ==========
+
+Then('I should see the checkout first name required error message') do |table|
+  @checkout_page = CheckoutPage.new
+  expected_message = table.hashes.first.fetch('expected_message')
+
+  expect(@checkout_page.error_message).to eq(expected_message)
+end
+
+# ========== THEN - Redirects & Results ==========
+
+Then('I should be redirected to the cart page from checkout') do
+  cart_page = CartPage.new
+
+  expect(cart_page.displayed_with_product?(CHECKOUT_PRODUCT_NAME)).to be true
+end
+
+Then('I should see the expected checkout step two result') do |table|
+  expected_result = table.hashes.first
   @checkout_page = CheckoutPage.new
 
-  case expected_page
-  when 'inventory'
-    inventory_page = InventoryPage.new
-    expect(inventory_page.displayed?).to be true
-  when 'complete'
-    expect(@checkout_page.on_complete?).to be true
-  else
-    raise "Unsupported expected page: #{expected_page}"
-  end
+  expect(
+    @checkout_page.expected_result_displayed?(
+      expected_result.fetch('expected_page'),
+      expected_result.fetch('expected_path'),
+      expected_result.fetch('expected_content')
+    )
+  ).to be true
 end
