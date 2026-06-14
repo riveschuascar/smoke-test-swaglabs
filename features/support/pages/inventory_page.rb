@@ -9,6 +9,10 @@ class InventoryPage
   ADD_BACKPACK_BUTTON_SELECTOR = '#add-to-cart-sauce-labs-backpack'
   CART_LINK_SELECTOR = '.shopping_cart_link'
 
+  def product_names
+    all(ITEM_NAME_SELECTOR, wait: 10).map(&:text)
+  end
+  
   def visit_directly
     visit(INVENTORY_URL)
   end
