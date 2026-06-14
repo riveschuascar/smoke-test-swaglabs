@@ -7,11 +7,12 @@ Feature: Checkout
   Background:
     Given I have a product in the cart for checkout
 
-  @smoke
-  Scenario: Validate required fields on checkout step one
-    When I go to the checkout step one page
-    And I continue checkout with empty information
-    Then I should see the first name required error message
+  Scenario: Validate first name required field on checkout step one
+  When I go to the checkout step one page
+  And I continue checkout with empty information
+  Then I should see the checkout first name required error message
+    | expected_message             |
+    | Error: First Name is required |
 
   @smoke
   Scenario: Cancel checkout from step one and return to cart

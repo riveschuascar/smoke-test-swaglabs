@@ -3,13 +3,13 @@ CHECKOUT_PASSWORD = 'secret_sauce'
 CHECKOUT_PRODUCT_NAME = 'Sauce Labs Backpack'
 
 def login_as_standard_user
-  visit('https://www.saucedemo.com/')
+  login_page = LoginPage.new
+  inventory_page = InventoryPage.new
 
-  fill_in 'user-name', with: CHECKOUT_USER
-  fill_in 'password', with: CHECKOUT_PASSWORD
-  click_button 'login-button'
+  login_page.visit_page
+  login_page.login_as(CHECKOUT_USER, CHECKOUT_PASSWORD)
 
-  expect(page).to have_current_path('/inventory.html', ignore_query: true)
+  expect(inventory_page.displayed?).to be true
 end
 
 def add_backpack_to_cart
@@ -20,79 +20,75 @@ def add_backpack_to_cart
   expect(page).to have_content(CHECKOUT_PRODUCT_NAME)
 end
 
-def go_to_checkout_step_one
-  find('#checkout').click
-
-  expect(page).to have_current_path('/checkout-step-one.html', ignore_query: true)
-end
-
-def fill_checkout_information(first_name, last_name, postal_code)
-  fill_in 'first-name', with: first_name
-  fill_in 'last-name', with: last_name
-  fill_in 'postal-code', with: postal_code
-end
-
 Given('I have a product in the cart for checkout') do
   login_as_standard_user
   add_backpack_to_cart
 end
 
 When('I go to the checkout step one page') do
-  go_to_checkout_step_one
+  @checkout_page = CheckoutPage.new
+  @checkout_page.go_to_step_one
+
+  expect(@checkout_page.on_step_one?).to be true
 end
 
 When('I continue checkout with empty information') do
-  find('#continue').click
+  @checkout_page = CheckoutPage.new
+  @checkout_page.continue
 end
 
-Then('I should see the first name required error message') do
-  expect(page).to have_css('[data-test="error"]')
-  expect(page).to have_content('Error: First Name is required')
+Then('I should see the checkout first name required error message') do |table|
+  @checkout_page = CheckoutPage.new
+  expected_message = table.hashes.first.fetch('expected_message')
+
+  expect(@checkout_page.error_message).to eq(expected_message)
 end
 
 When('I cancel checkout from step one') do
-  find('#cancel').click
+  @checkout_page = CheckoutPage.new
+  @checkout_page.cancel
 end
 
 Then('I should be redirected to the cart page from checkout') do
-  expect(page).to have_current_path('/cart.html', ignore_query: true)
-  expect(page).to have_content('Your Cart')
+  @checkout_page = CheckoutPage.new
+
+  expect(@checkout_page.on_cart?).to be true
 end
 
 When('I enter checkout information {string} {string} {string}') do |first_name, last_name, postal_code|
-  fill_checkout_information(first_name, last_name, postal_code)
+  @checkout_page = CheckoutPage.new
+  @checkout_page.fill_information(first_name, last_name, postal_code)
 end
 
 When('I continue to the checkout overview page') do
-  find('#continue').click
+  @checkout_page = CheckoutPage.new
+  @checkout_page.continue
 
-  expect(page).to have_current_path('/checkout-step-two.html', ignore_query: true)
-  expect(page).to have_content('Checkout: Overview')
+  expect(@checkout_page.on_step_two?).to be true
 end
 
 When('I perform the checkout step two action {string}') do |action|
+  @checkout_page = CheckoutPage.new
+
   case action
   when 'cancel'
-    find('#cancel').click
-
+    @checkout_page.cancel
   when 'finish'
-    find('#finish').click
-
+    @checkout_page.finish
   else
     raise "Unsupported checkout step two action: #{action}"
   end
 end
 
 Then('I should be redirected to {string} after checkout step two') do |expected_page|
+  @checkout_page = CheckoutPage.new
+
   case expected_page
   when 'inventory'
-    expect(page).to have_current_path('/inventory.html', ignore_query: true)
-    expect(page).to have_content('Products')
-
+    inventory_page = InventoryPage.new
+    expect(inventory_page.displayed?).to be true
   when 'complete'
-    expect(page).to have_current_path('/checkout-complete.html', ignore_query: true)
-    expect(page).to have_content('Thank you for your order!')
-
+    expect(@checkout_page.on_complete?).to be true
   else
     raise "Unsupported expected page: #{expected_page}"
   end
