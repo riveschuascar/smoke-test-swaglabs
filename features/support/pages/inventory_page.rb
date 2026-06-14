@@ -6,6 +6,8 @@ class InventoryPage
   SORT_SELECTOR = '.product_sort_container'
   ITEM_NAME_SELECTOR = '.inventory_item_name'
   ITEM_PRICE_SELECTOR = '.inventory_item_price'
+  ADD_BACKPACK_BUTTON_SELECTOR = '#add-to-cart-sauce-labs-backpack'
+  CART_LINK_SELECTOR = '.shopping_cart_link'
 
   def visit_directly
     visit(INVENTORY_URL)
@@ -37,5 +39,13 @@ class InventoryPage
     else
       raise "Unsupported inventory field: #{field}"
     end
+  end
+
+  def add_backpack_to_cart
+    find(ADD_BACKPACK_BUTTON_SELECTOR, wait: 10).click
+  end
+
+  def open_cart
+    find(CART_LINK_SELECTOR, wait: 10).click
   end
 end
