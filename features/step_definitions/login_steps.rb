@@ -1,6 +1,4 @@
 Given('I am on the SauceDemo login page') do
-  @login_page = CleanPOM::LoginPage.new
-  @inventory_page = CleanPOM::InventoryPage.new
   @login_page.open
   @login_page.loaded?
 end
@@ -18,7 +16,7 @@ When('I click the login button') do
 end
 
 Then('I should be redirected to the inventory page') do
-  expect(@inventory_page.loaded?).to be true
+  expect(@inventory_page.displayed?).to be true
 end
 
 Then('I should see the error message {string}') do |expected_message|

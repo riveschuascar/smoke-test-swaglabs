@@ -25,6 +25,12 @@ class LoginFormComponent
     find(LOGIN_BUTTON).click
   end
 
+  def login(username, password)
+    fill_username(username)
+    fill_password(password)
+    click_login
+  end
+
   def error_message
     find(ERROR_MESSAGE).text
   end

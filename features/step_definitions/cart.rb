@@ -1,6 +1,13 @@
+Before('@cart') do
+  @login_page = CleanPOM::LoginPage.new
+  @inventory_page = InventoryPage.new
+  @product_page = ProductDetailPage.new
+  @cart_page = CartPage.new
+end
+
 def login_with_clean_cart
-  @login_page.visit_page
-  @login_page.login_as('standard_user', 'secret_sauce')
+  @login_page.open
+  @login_page.login_form.login('standard_user', 'secret_sauce')
   @inventory_page.visit_directly
 end
 

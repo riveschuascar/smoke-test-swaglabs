@@ -23,5 +23,9 @@ module CleanPOM
     def components
       [primary_header, inventory_list]
     end
+
+    def displayed?
+      loaded?
+    end
   end
 end
