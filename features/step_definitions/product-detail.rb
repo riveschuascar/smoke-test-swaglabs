@@ -19,10 +19,9 @@ Given("I am on the {string} product page") do |product_name|
 end
 
 Then("the following product information should be displayed") do |table|
-  data = table.rows_hash
-  expect(@product_page).to be_displayed
-  expect(@product_page.name).to eq(data['title'])
-  expect(@product_page.price).to eq(data['price'])
+  expected = table.rows_hash
+  expect(@product_page.displayed?).to be true
+  expect(@product_page.correct_product?(expected)).to be true
 end
 
 Then('the button {string} is visible') do |_button_text|
