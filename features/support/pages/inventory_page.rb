@@ -7,6 +7,7 @@ class InventoryPage
   ITEM_NAME_SELECTOR = '.inventory_item_name'
   ITEM_PRICE_SELECTOR = '.inventory_item_price'
   ADD_BACKPACK_BUTTON_SELECTOR = '#add-to-cart-sauce-labs-backpack'
+  REMOVE_BACKPACK_BUTTON = '#remove-sauce-labs-backpack'
   CART_LINK_SELECTOR = '.shopping_cart_link'
 
   def product_names
@@ -48,7 +49,15 @@ class InventoryPage
     find(ADD_BACKPACK_BUTTON_SELECTOR, wait: 10).click
   end
 
+  def remove_backpack_from_cart
+    find(REMOVE_BACKPACK_BUTTON, wait: 10).click
+  end
+
   def open_cart
     find(CART_LINK_SELECTOR, wait: 10).click
+  end
+
+  def open_product(name)
+    find("[data-test='inventory-item-name']", text: name, wait: 10).click
   end
 end

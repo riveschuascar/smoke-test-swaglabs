@@ -1,124 +1,87 @@
-CART_URLS = {
-  login: 'https://www.saucedemo.com/',
-  inventory: 'https://www.saucedemo.com/inventory.html',
-  checkout_information: 'https://www.saucedemo.com/checkout-step-one.html'
-}.freeze
-
-CART_USERS = {
-  standard_user: 'standard_user',
-  password: 'secret_sauce'
-}.freeze
-
-CART_PRODUCTS = {
-  'Sauce Labs Backpack' => {
-    inventory_add: "//*[@data-test='add-to-cart-sauce-labs-backpack']",
-    inventory_remove: "//*[@data-test='remove-sauce-labs-backpack']",
-    detail_add: "//*[@data-test='add-to-cart']",
-    detail_remove: "//*[@data-test='remove']",
-    cart_remove: "//*[@data-test='remove-sauce-labs-backpack']"
-  }
-}.freeze
-
-CART_XPATH = {
-  username_input: "//*[@data-test='username']",
-  password_input: "//*[@data-test='password']",
-  login_button: "//*[@data-test='login-button']",
-  cart_link: "//a[contains(@class, 'shopping_cart_link')]",
-  continue_shopping_button: "//*[@data-test='continue-shopping']",
-  checkout_button: "//*[@data-test='checkout']"
-}.freeze
-
-CART_CSS = {
-  inventory_list: '.inventory_list',
-  cart_badge: '.shopping_cart_badge',
-  cart_item: '.cart_item',
-  checkout_info: '.checkout_info'
-}.freeze
-
-def find_by_xpath(xpath)
-  find(:xpath, xpath, wait: 10)
-end
-
-def cart_product(product_name)
-  CART_PRODUCTS.fetch(product_name)
-end
-
-def product_detail_link_xpath(product_name)
-  "//div[contains(@class, 'inventory_item_name') and normalize-space()='#{product_name}']"
-end
-
 def login_with_clean_cart
-  visit(CART_URLS[:login])
-
-  find_by_xpath(CART_XPATH[:username_input]).set(CART_USERS[:standard_user])
-  find_by_xpath(CART_XPATH[:password_input]).set(CART_USERS[:password])
-  find_by_xpath(CART_XPATH[:login_button]).click
-
-  expect(page).to have_current_path(CART_URLS[:inventory], ignore_query: true)
-  expect(page).to have_css(CART_CSS[:inventory_list], wait: 10)
+  @login_page.visit_page
+  @login_page.login_as('standard_user', 'secret_sauce')
+  @inventory_page.visit_directly
 end
+
+# ─── Background ──────────────────────────────────────────────────────────────
 
 Given('I am logged in with a clean cart') do
   login_with_clean_cart
 end
 
+# ─── Inventory ───────────────────────────────────────────────────────────────
+
 When('I add {string} to the cart from the inventory page') do |product|
-  find_by_xpath(cart_product(product)[:inventory_add]).click
+  case product
+  when "Sauce Labs Backpack"
+    @inventory_page.add_backpack_to_cart
+  else
+    raise "Producto no registrado: '#{row.fetch('product')}'"
+  end
 end
 
 When('I add the following product to the cart from the inventory page') do |table|
   table.hashes.each do |row|
-    product = row.fetch('product')
-    find_by_xpath(cart_product(product)[:inventory_add]).click
+    case row.fetch('product')
+    when 'Sauce Labs Backpack'
+      @inventory_page.add_backpack_to_cart
+    else
+      raise "Producto no registrado: '#{row.fetch('product')}'"
+    end
   end
 end
 
 When('I remove {string} from the inventory page') do |product|
-  find_by_xpath(cart_product(product)[:inventory_remove]).click
+  @inventory_page.remove_backpack_from_cart
 end
 
+# ─── Product detail ──────────────────────────────────────────────────────────
+
 When('I open the detail page for {string}') do |product|
-  find_by_xpath(product_detail_link_xpath(product)).click
-  expect(page).to have_current_path(/inventory-item.html/, wait: 10)
+  @inventory_page.open_product(product)
 end
 
 When('I add {string} to the cart from the product detail page') do |product|
-  find_by_xpath(cart_product(product)[:detail_add]).click
+  @product_page.add_to_cart
 end
 
 When('I remove {string} from the product detail page') do |product|
-  find_by_xpath(cart_product(product)[:detail_remove]).click
+  @product_page.remove_from_cart
 end
 
+# ─── Cart ────────────────────────────────────────────────────────────────────
+
 When('I open the cart page') do
-  find_by_xpath(CART_XPATH[:cart_link]).click
+  @cart_page.open
 end
 
 When('I remove {string} from the cart page') do |product|
-  find_by_xpath(cart_product(product)[:cart_remove]).click
+  @cart_page.remove_product(@cart_page.cart_product(product)[:cart_remove])
 end
 
 When('I click the continue shopping button') do
-  find_by_xpath(CART_XPATH[:continue_shopping_button]).click
+  @cart_page.continue_shopping
 end
 
 When('I click the checkout button') do
-  find_by_xpath(CART_XPATH[:checkout_button]).click
+  @cart_page.go_to_checkout
 end
 
+# ─── Assertions ──────────────────────────────────────────────────────────────
+
 Then('the cart badge should show {string}') do |quantity|
-  expect(page).to have_css(CART_CSS[:cart_badge], text: quantity, wait: 10)
+  expect(@cart_page.badge_count).to eq(quantity)
 end
 
 Then('the cart badge should not be visible') do
-  expect(page).to have_no_css(CART_CSS[:cart_badge], wait: 10)
+  expect(@cart_page).not_to be_badge_visible
 end
 
 Then('the cart item for {string} should not be visible') do |product|
-  expect(page).to have_no_css(CART_CSS[:cart_item], text: product, wait: 10)
+  expect(@cart_page).not_to be_item_visible(product)
 end
 
 Then('I should be redirected to the checkout information page') do
-  expect(page).to have_current_path(CART_URLS[:checkout_information], ignore_query: true)
-  expect(page).to have_css(CART_CSS[:checkout_info], wait: 10)
+  expect(@cart_page).to be_on_checkout_page
 end
