@@ -1,28 +1,14 @@
-Then('I login with credentials') do |table|
-  # table is a Cucumber::MultilineArgument::DataTable
-  pending # Write code here that turns the phrase above into concrete actions
+Then('I add {string} to the cart') do |product_name|
+  expect(@product_page.correct_product_displayed?(product_name)).to be true
+  @product_page.add_to_cart
+  expect(@product_page.remove_visible?).to be true
 end
 
-Then('I add {string} to the cart') do |string|
-  pending # Write code here that turns the phrase above into concrete actions
+Then('I go to the overview page') do
+  @checkout_page.continue_to_overview
 end
 
-Then('I continue the checkout') do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then('I verify the checkout overview') do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then('I finish the checkout') do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then('I see the confirmatio page') do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
-Then('I am on login page after I logged out') do
-  pending # Write code here that turns the phrase above into concrete actions
+Then('The overview information should be') do |table|
+  data = table.hashes.first
+  expect(@checkout_page.overview_information_displayed?(data)).to be true
 end
