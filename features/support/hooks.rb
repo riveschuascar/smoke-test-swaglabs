@@ -13,6 +13,11 @@ Before('@logout') do
   @burguer_menu = nil
 end
 
+Before('@inventory') do
+  @login_page = LoginPage.new
+  @inventory_page = InventoryPage.new
+end
+
 Before('@cart') do
   @login_page = CleanPOM::LoginPage.new
   @inventory_page = InventoryPage.new

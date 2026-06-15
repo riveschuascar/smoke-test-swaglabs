@@ -2,24 +2,26 @@ class InventoryPage
   include Capybara::DSL
 
   INVENTORY_URL = 'https://www.saucedemo.com/inventory.html'
-  INVENTORY_LIST_SELECTOR = '.inventory_list'
-  SORT_SELECTOR = '.product_sort_container'
-  ITEM_NAME_SELECTOR = '.inventory_item_name'
-  ITEM_PRICE_SELECTOR = '.inventory_item_price'
-  ADD_BACKPACK_BUTTON_SELECTOR = '#add-to-cart-sauce-labs-backpack'
-  REMOVE_BACKPACK_BUTTON = '#remove-sauce-labs-backpack'
-  CART_LINK_SELECTOR = '.shopping_cart_link'
+
+  INVENTORY_LIST_SELECTOR    = '[data-test="inventory-container"]'
+  SORT_SELECTOR              = '[data-test="product-sort-container"]'
+  ITEM_NAME_SELECTOR         = '[data-test="inventory-item-name"]'
+  ITEM_PRICE_SELECTOR        = '[data-test="inventory-item-price"]'
+  ADD_BACKPACK_BUTTON_SELECTOR = '[data-test="add-to-cart-sauce-labs-backpack"]'
+  REMOVE_BACKPACK_BUTTON     = '[data-test="remove-sauce-labs-backpack"]'
+  CART_LINK_SELECTOR         = '[data-test="shopping-cart-link"]'
 
   def product_names
     all(ITEM_NAME_SELECTOR, wait: 10).map(&:text)
   end
-  
+
   def visit_directly
     visit(INVENTORY_URL)
   end
 
   def displayed?
-    has_current_path?('/inventory.html', ignore_query: true) && has_css?(INVENTORY_LIST_SELECTOR, wait: 10)
+    has_current_path?('/inventory.html', ignore_query: true) &&
+    has_css?(INVENTORY_LIST_SELECTOR, wait: 0.2)
   end
 
   def sort_by(option)
@@ -27,11 +29,11 @@ class InventoryPage
   end
 
   def first_item_name
-    all(ITEM_NAME_SELECTOR).first.text
+    all(ITEM_NAME_SELECTOR, wait: 10).first.text
   end
 
   def first_item_price
-    all(ITEM_PRICE_SELECTOR).first.text
+    all(ITEM_PRICE_SELECTOR, wait: 10).first.text
   end
 
   def first_item_value(field)
@@ -58,6 +60,6 @@ class InventoryPage
   end
 
   def open_product(name)
-    find("[data-test='inventory-item-name']", text: name, wait: 10).click
+    find(ITEM_NAME_SELECTOR, text: name, wait: 10).click
   end
 end
