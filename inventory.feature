@@ -1,3 +1,4 @@
+@inventory
 Feature: Inventory
 
   As a Standard User
