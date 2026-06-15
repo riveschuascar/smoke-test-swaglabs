@@ -1,9 +1,11 @@
 class CartPage
   include Capybara::DSL
 
-  CART_PATH    = '/cart.html'
-  CART_TITLE   = 'Your Cart'
-  CART_ITEM_SELECTOR = '.cart_item'
+  CART_PATH             = '/cart.html'
+  CART_TITLE            = 'Your Cart'
+  CART_TITLE_SELECTOR   = '[data-test="title"]'
+  CHECKOUT_INFO_SELECTOR = '[data-test="checkout-info-container"]'
+  CHECKOUT_URL          = 'https://www.saucedemo.com/checkout-step-one.html'
 
   XPATH = {
     continue_shopping: "//*[@data-test='continue-shopping']",
@@ -12,23 +14,21 @@ class CartPage
   }.freeze
 
   CSS = {
-    cart_badge: '.shopping_cart_badge',
-    cart_item:  '.cart_item'
+    cart_badge: '[data-test="shopping-cart-badge"]',
+    cart_item:  '[data-test="inventory-item-name"]'
   }.freeze
 
-  CHECKOUT_URL = 'https://www.saucedemo.com/checkout-step-one.html'
-  CHECKOUT_INFO_SELECTOR = '.checkout_info'
-
   CART_PRODUCTS = {
-  'Sauce Labs Backpack' => {
-    inventory_add:    "//*[@data-test='add-to-cart-sauce-labs-backpack']",
-    inventory_remove: "//*[@data-test='remove-sauce-labs-backpack']",
-    detail_add:       "//*[@data-test='add-to-cart']",
-    detail_remove:    "//*[@data-test='remove']",
-    cart_remove:      "//*[@data-test='remove-sauce-labs-backpack']"
-  }}.freeze
+    'Sauce Labs Backpack' => {
+      inventory_add:    "//*[@data-test='add-to-cart-sauce-labs-backpack']",
+      inventory_remove: "//*[@data-test='remove-sauce-labs-backpack']",
+      detail_add:       "//*[@data-test='add-to-cart']",
+      detail_remove:    "//*[@data-test='remove']",
+      cart_remove:      "//*[@data-test='remove-sauce-labs-backpack']"
+    }
+  }.freeze
 
-  # ─── Navigation ────────────────────────────────────────────────────────────
+  # ─── Navigation ──────────────────────────────────────────────────────────
 
   def open
     find(:xpath, XPATH[:cart_link], wait: 10).click
@@ -42,11 +42,11 @@ class CartPage
     find(:xpath, XPATH[:checkout], wait: 10).click
   end
 
-  # ─── State ─────────────────────────────────────────────────────────────────
+  # ─── State ───────────────────────────────────────────────────────────────
 
   def displayed?
     has_current_path?(CART_PATH, ignore_query: true) &&
-      has_content?(CART_TITLE, wait: 2)
+    has_css?(CART_TITLE_SELECTOR, text: CART_TITLE, wait: 0.2)
   end
 
   def displayed_with_product?(product_name)
@@ -58,11 +58,11 @@ class CartPage
   end
 
   def badge_visible?
-    has_css?(CSS[:cart_badge], wait: 2)
+    has_css?(CSS[:cart_badge], wait: 0.2)
   end
 
   def item_visible?(product_name)
-    has_css?(CSS[:cart_item], text: product_name, wait: 2)
+    has_css?(CSS[:cart_item], text: product_name, wait: 0.2)
   end
 
   def remove_product(product_xpath)
@@ -71,7 +71,7 @@ class CartPage
 
   def on_checkout_page?
     has_current_path?(CHECKOUT_URL, ignore_query: true) &&
-      has_css?(CHECKOUT_INFO_SELECTOR, wait: 2)
+    has_css?(CHECKOUT_INFO_SELECTOR, wait: 0.2)
   end
 
   def cart_product(product_name)

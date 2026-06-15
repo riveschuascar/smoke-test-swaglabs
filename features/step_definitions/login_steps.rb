@@ -8,7 +8,6 @@ When('I login with username {string} and password {string}') do |user, password|
 end
 
 Then('I should be redirected to the inventory page') do
-  binding.irb
   expect(@inventory_page.displayed?).to be true
 end
 

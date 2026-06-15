@@ -7,7 +7,7 @@ end
 
 def login_with_clean_cart
   @login_page.open
-  @login_page.login_form.login('standard_user', 'secret_sauce')
+  @login_page.login('standard_user', 'secret_sauce')
   @inventory_page.visit_directly
 end
 
