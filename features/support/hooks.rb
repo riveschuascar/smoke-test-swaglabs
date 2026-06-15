@@ -2,6 +2,14 @@ After do
   Capybara.reset_sessions!
 end
 
+Before('@E2E') do
+  @login_page = CleanPOM::LoginPage.new
+  @products_page = InventoryPage.new
+  @product_page = ProductDetailPage.new
+  @cart_page = CartPage.new
+  @checkout_page = CheckoutPage.new
+end
+
 Before('@login') do
   @login_page = CleanPOM::LoginPage.new
   @inventory_page = CleanPOM::InventoryPage.new

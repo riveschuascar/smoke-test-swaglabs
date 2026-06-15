@@ -76,6 +76,14 @@ class CheckoutPage
     has_css?(TITLE_SELECTOR, text: OVERVIEW_TITLE, wait: 0.2)
   end
 
+  def overview_information_displayed?(expected)
+    has_text?("Item total: #{expected['item_total']}", wait: 0.2) &&
+    has_text?("Tax: #{expected['tax']}", wait: 0.2) &&
+    has_text?("Total: #{expected['total']}", wait: 0.2) &&
+    has_text?(expected['card'], wait: 0.2) &&
+    has_text?(expected['shippin'], wait: 0.2)
+  end
+
   def on_step_one?
     has_current_path?(STEP_ONE_URL, ignore_query: true) &&
       has_css?(CONTINUE_BUTTON, wait: 2)
