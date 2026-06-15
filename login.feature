@@ -8,9 +8,7 @@ Feature: Login
   @smoke
   Scenario Outline: Login fails with invalid credentials or user
     Given I am on the SauceDemo login page
-    When I enter the username "<username>"
-    And I enter the password "<password>"
-    And I click the login button
+    When I login with username "<username>" and password "<password>"
     Then I should see the error message "<error_message>"
 
     Examples:
@@ -23,9 +21,7 @@ Feature: Login
   @smoke
   Scenario Outline: Successful login with valid credentials and user
     Given I am on the SauceDemo login page
-    When I enter the username "<username>"
-    And I enter the password "<password>"
-    And I click the login button
+    When I login with username "<username>" and password "<password>"
     Then I should be redirected to the inventory page
 
     Examples:

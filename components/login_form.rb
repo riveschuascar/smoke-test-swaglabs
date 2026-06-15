@@ -1,28 +1,34 @@
 class LoginFormComponent
   include Capybara::DSL
 
-  ROOT = '["login_button_container"]'.freeze
+  ROOT = '[data-test="login_button_container"]'.freeze
 
   USERNAME_INPUT = '[data-test="username"]'.freeze
   PASSWORD_INPUT = '[data-test="password"]'.freeze
   LOGIN_BUTTON   = '[data-test="login-button"]'.freeze
-
   ERROR_MESSAGE  = '[data-test="error"]'.freeze
 
-  def loaded?
-    has_css?(USERNAME_INPUT) && has_css?(PASSWORD_INPUT) && has_css?(LOGIN_BUTTON)
-  end
+  LOGIN_BUTTON_TEXT = 'Login'.freeze
+
+  ERROR_MESSAGES = {
+    locked:           'Epic sadface: Sorry, this user has been locked out.',
+    invalid:          'Epic sadface: Username and password do not match any user in this service',
+    username_required: 'Epic sadface: Username is required',
+    password_required: 'Epic sadface: Password is required'
+  }.freeze
+
+  # ─── Actions ───────────────────────────────────────────────────────────────
 
   def fill_username(username)
-    find(USERNAME_INPUT).set(username)
+    find(USERNAME_INPUT, wait: 10).set(username)
   end
 
   def fill_password(password)
-    find(PASSWORD_INPUT).set(password)
+    find(PASSWORD_INPUT, wait: 10).set(password)
   end
 
   def click_login
-    find(LOGIN_BUTTON).click
+    find(LOGIN_BUTTON, wait: 10).click
   end
 
   def login(username, password)
@@ -31,7 +37,22 @@ class LoginFormComponent
     click_login
   end
 
+  # ─── State ─────────────────────────────────────────────────────────────────
+
+  def loaded?
+    has_css?(USERNAME_INPUT,  wait: 0.3) &&
+    has_css?(PASSWORD_INPUT,  wait: 0.3) &&
+    has_css?(LOGIN_BUTTON, text: LOGIN_BUTTON_TEXT, wait: 0.3)
+  end
+
+  # ─── Errors ────────────────────────────────────────────────────────────────
+
   def error_message
-    find(ERROR_MESSAGE).text
+    find(ERROR_MESSAGE, wait: 10).text
+  end
+
+  def error_displayed?(message)
+    full_message = ERROR_MESSAGES.values.find { |v| v.include?(message) } || message
+    has_css?(ERROR_MESSAGE, text: full_message, wait: 0.3)
   end
 end
