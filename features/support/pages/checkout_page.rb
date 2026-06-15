@@ -66,6 +66,14 @@ class CheckoutPage
 
   # ─── State ─────────────────────────────────────────────────────────────────
 
+  def complete_header
+    find(COMPLETE_HEADER_SELECTOR, wait: 10).text
+  end
+
+  def complete_text
+    find('[data-test="complete-text"]', wait: 10).text
+  end
+  
   def step_one_displayed?
     has_current_path?(STEP_ONE_URL, ignore_query: true) &&
     has_css?(CONTINUE_BUTTON, wait: 0.2)

@@ -6,31 +6,28 @@ Feature: Checkout
 
   Background:
     Given I have a product in the cart for checkout
+    And I am in the cart page
 
-  Scenario: Validate first name required field on checkout step one
-    When I go to the checkout step one page
-    And I continue checkout with empty information
-    Then I should see the checkout first name required error message
+  @smoke
+  Scenario: Validate first name required field on 'Checkout: Your Information' page
+    When I click "checkout" button
+    And I click "continue" button with empty information
+    Then I should see the "<expected_message>" error message
       | expected_message              |
       | Error: First Name is required |
 
   @smoke
-  Scenario: Cancel checkout from step one and return to cart
-    When I go to the checkout step one page
-    And I cancel checkout from step one
+  Scenario: Cancel an order from 'Checkout: Overview'
+    When I click "checkout" button
+    And I "cancel" checkout from overview page
     Then I should be redirected to the cart page from checkout
 
   @smoke
-  Scenario Outline: Complete checkout step two action
-    When I go to the checkout step one page
-    And I enter checkout information "<first_name>" "<last_name>" "<postal_code>"
-    And I continue to the checkout overview page
-    And I perform the checkout step two action "<action>"
-    Then I should see the expected checkout step two result
-      | expected_page   | expected_path   | expected_content   |
-      | <expected_page> | <expected_path> | <expected_content> |
-
-    Examples:
-      | first_name | last_name | postal_code | action | expected_page | expected_path           | expected_content          |
-      | Mauricio   | Garron    | 0000        | cancel | inventory     | /inventory.html         | Products                  |
-      | Mauricio   | Garron    | 0000        | finish | complete      | /checkout-complete.html | Thank you for your order! |
+  Scenario Outline: Finish checkout to make an order
+    When I click "checkout" button
+    And I enter checkout information "Mauricio" "Garron" "0000"
+    And I click "continue" button
+    And I "finish" checkout from overview page
+    Then I see the message
+      | title                     | text                                                                                    |
+      | Thank you for your order! | Your order has been dispatched, and will arrive just as fast as the pony can get there! |

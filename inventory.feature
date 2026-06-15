@@ -28,7 +28,7 @@ Feature: Inventory
       | Price (low to high) | price | $7.99                             |
 
   @smoke
-  Scenario: Return to the inventory page
+  Scenario: See the product list in Inventory Page
     Given I am logged in on the SauceDemo inventory page
     Then I should see the inventory product list
       | product                           |
@@ -38,3 +38,4 @@ Feature: Inventory
       | Sauce Labs Fleece Jacket          |
       | Sauce Labs Onesie                 |
       | Test.allTheThings() T-Shirt (Red) |
+      

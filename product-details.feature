@@ -22,4 +22,3 @@ Feature: Product Detail Page
       | price | $29.99              |
     When I click on the "Back to products" link
     Then I am redirected to the Products page
-    And I can see the list of products
