@@ -19,6 +19,15 @@ class CartPage
   CHECKOUT_URL = 'https://www.saucedemo.com/checkout-step-one.html'
   CHECKOUT_INFO_SELECTOR = '.checkout_info'
 
+  CART_PRODUCTS = {
+  'Sauce Labs Backpack' => {
+    inventory_add:    "//*[@data-test='add-to-cart-sauce-labs-backpack']",
+    inventory_remove: "//*[@data-test='remove-sauce-labs-backpack']",
+    detail_add:       "//*[@data-test='add-to-cart']",
+    detail_remove:    "//*[@data-test='remove']",
+    cart_remove:      "//*[@data-test='remove-sauce-labs-backpack']"
+  }}.freeze
+
   # ─── Navigation ────────────────────────────────────────────────────────────
 
   def open
@@ -37,7 +46,7 @@ class CartPage
 
   def displayed?
     has_current_path?(CART_PATH, ignore_query: true) &&
-      has_content?(CART_TITLE, wait: 10)
+      has_content?(CART_TITLE, wait: 2)
   end
 
   def displayed_with_product?(product_name)
@@ -49,11 +58,11 @@ class CartPage
   end
 
   def badge_visible?
-    has_css?(CSS[:cart_badge], wait: 10)
+    has_css?(CSS[:cart_badge], wait: 2)
   end
 
   def item_visible?(product_name)
-    has_css?(CSS[:cart_item], text: product_name, wait: 10)
+    has_css?(CSS[:cart_item], text: product_name, wait: 2)
   end
 
   def remove_product(product_xpath)
@@ -62,6 +71,12 @@ class CartPage
 
   def on_checkout_page?
     has_current_path?(CHECKOUT_URL, ignore_query: true) &&
-      has_css?(CHECKOUT_INFO_SELECTOR, wait: 10)
+      has_css?(CHECKOUT_INFO_SELECTOR, wait: 2)
+  end
+
+  def cart_product(product_name)
+    CART_PRODUCTS.fetch(product_name) do
+      raise "Producto no registrado en CART_PRODUCTS: '#{product_name}'"
+    end
   end
 end
