@@ -8,10 +8,9 @@ Feature: Logout
 @logout
 Scenario: Successful logout
   Given I navigate to the login page
-  And I enter the credentials
+  And I login with credentials
   | user          | password     |
   | standard_user | secret_sauce |
-  And I click the Login button
   And I verify that the Products page is displayed
   When I open the hamburger menu
   And I click the Logout link

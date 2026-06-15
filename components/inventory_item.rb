@@ -25,8 +25,8 @@ class InventoryItemComponent
   # ─── State ─────────────────────────────────────────────────────────────────
 
   def loaded?
-    @node.has_css?(NAME_SELECTOR, wait: 0.3) &&
-    @node.has_css?(PRICE_SELECTOR, wait: 0.3) &&
+    @node.has_css?(NAME_SELECTOR, wait: 0.2) &&
+    @node.has_css?(PRICE_SELECTOR, wait: 0.2) &&
     name.length > 0 &&
     price.match?(/^\$[\d]+\.[\d]{2}$/)
   end
@@ -40,7 +40,7 @@ class InventoryItemComponent
   end
 
   def correct_product?(expected_name, expected_price)
-    @node.has_css?(NAME_SELECTOR,  text: expected_name,  wait: 0.3) &&
-    @node.has_css?(PRICE_SELECTOR, text: expected_price, wait: 0.3)
+    @node.has_css?(NAME_SELECTOR,  text: expected_name,  wait: 0.2) &&
+    @node.has_css?(PRICE_SELECTOR, text: expected_price, wait: 0.2)
   end
 end

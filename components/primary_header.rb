@@ -30,10 +30,10 @@ class PrimaryHeaderComponent
   # ─── State ─────────────────────────────────────────────────────────────────
 
   def loaded? # Whitout burguer menu
-    has_css?(ROOT,                   wait: 0.3) &&
-    has_css?(LOGO, text: LOGO_TEXT,  wait: 0.3) &&
-    has_css?(BURGER_MENU_BUTTON,     wait: 0.3) &&
-    has_css?(CART,                   wait: 0.3)
+    has_css?(ROOT,                   wait: 0.2) &&
+    has_css?(LOGO, text: LOGO_TEXT,  wait: 0.2) &&
+    has_css?(BURGER_MENU_BUTTON,     wait: 0.2) &&
+    has_css?(CART,                   wait: 0.2)
   end
 
   def loaded_with_menu? # Whit burguer menu
@@ -53,11 +53,11 @@ class PrimaryHeaderComponent
   end
 
   def cart_badge_visible?
-    has_css?(CART_BADGE, wait: 0.3)
+    has_css?(CART_BADGE, wait: 0.2)
   end
 
   def cart_count_equals?(expected)
-    has_css?(CART_BADGE, text: expected, wait: 0.3)
+    has_css?(CART_BADGE, text: expected, wait: 0.2)
   end
 
   private

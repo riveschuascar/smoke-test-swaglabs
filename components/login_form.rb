@@ -1,7 +1,7 @@
 class LoginFormComponent
   include Capybara::DSL
 
-  ROOT = '[data-test="login_button_container"]'.freeze
+  ROOT = '#login_button_container'.freeze
 
   USERNAME_INPUT = '[data-test="username"]'.freeze
   PASSWORD_INPUT = '[data-test="password"]'.freeze
@@ -40,9 +40,9 @@ class LoginFormComponent
   # ─── State ─────────────────────────────────────────────────────────────────
 
   def loaded?
-    has_css?(USERNAME_INPUT,  wait: 0.3) &&
-    has_css?(PASSWORD_INPUT,  wait: 0.3) &&
-    has_css?(LOGIN_BUTTON, text: LOGIN_BUTTON_TEXT, wait: 0.3)
+    has_css?(USERNAME_INPUT,  wait: 0.2) &&
+    has_css?(PASSWORD_INPUT,  wait: 0.2) &&
+    find(LOGIN_BUTTON, wait: 10).value == LOGIN_BUTTON_TEXT
   end
 
   # ─── Errors ────────────────────────────────────────────────────────────────
@@ -53,6 +53,6 @@ class LoginFormComponent
 
   def error_displayed?(message)
     full_message = ERROR_MESSAGES.values.find { |v| v.include?(message) } || message
-    has_css?(ERROR_MESSAGE, text: full_message, wait: 0.3)
+    has_css?(ERROR_MESSAGE, text: full_message, wait: 0.2)
   end
 end

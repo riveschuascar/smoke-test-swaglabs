@@ -3,8 +3,8 @@ require_relative 'burger_menu_item'
 class BurgerMenuComponent
   include Capybara::DSL
 
-  ROOT = '[data-test="nav-menu"]'.freeze
-  ITEM = '[data-test="nav-menu-item"]'.freeze
+  ROOT = '.bm-menu'.freeze
+  ITEM = '.bm-item'.freeze
 
   EXPECTED_COUNT = 4.freeze
   EXPECTED_ITEMS = BurgerMenuItemComponent::VALID_ITEMS.freeze
@@ -18,7 +18,7 @@ class BurgerMenuComponent
   # ─── State ─────────────────────────────────────────────────────────────────
 
   def loaded?
-    has_css?(ROOT, wait: 0.3) &&
+    has_css?(ROOT, wait: 0.2) &&
     count == EXPECTED_COUNT &&
     items.all?(&:loaded?) &&
     all_expected_items_present?

@@ -29,7 +29,7 @@ class InventoryListComponent
   # ─── State ─────────────────────────────────────────────────────────────────
 
   def loaded?
-    has_css?(ROOT, wait: 0.3) &&
+    has_css?(ROOT, wait: 0.2) &&
     count == EXPECTED_COUNT &&
     items.all?(&:loaded?)
   end

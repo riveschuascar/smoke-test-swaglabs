@@ -6,14 +6,9 @@ Given('I navigate to the login page') do
   @login_page.loaded?
 end
 
-Given('I enter the credentials') do |table|
+Given('I login with credentials') do |table|
   data = table.hashes.first
-  @login_page.login_form.fill_username(data['user'])
-  @login_page.login_form.fill_password(data['password'])
-end
-
-Given('I click the Login button') do
-  @login_page.login_form.click_login
+  @login_page.login(data['user'], data['password'])
 end
 
 Given('I verify that the Products page is displayed') do
@@ -21,7 +16,7 @@ Given('I verify that the Products page is displayed') do
 end
 
 When('I open the hamburger menu') do
-  @burguer_menu = @inventory_page.open_burguer_menu
+  @burguer_menu = @inventory_page.open_burger_menu
 end
 
 When('I click the Logout link') do
